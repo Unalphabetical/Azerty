@@ -2,6 +2,8 @@ package me.puthvang.azerty;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import me.puthvang.azerty.commands.*;
+import me.puthvang.azerty.commands.manager.CommandManager;
 import me.puthvang.azerty.utilities.RegexPattern;
 import me.puthvang.azerty.utilities.Type;
 import net.dv8tion.jda.api.JDA;
@@ -93,12 +95,21 @@ public class Azerty {
     private static void login(){
         try {
             System.out.println("Token found, attempting to log in.");
+
+            CommandManager manager = new CommandManager();
+            manager.add(new PlayCommand());
+
             bot = JDABuilder.createDefault(data.getBot().getToken())
                     .enableIntents(GatewayIntent.GUILD_MEMBERS)
                     .enableIntents(GatewayIntent.GUILD_MESSAGES)
                     .enableIntents(GatewayIntent.GUILD_PRESENCES)
+                    .enableIntents(GatewayIntent.MESSAGE_CONTENT)
+                    .enableIntents(GatewayIntent.GUILD_VOICE_STATES)
                     .enableCache(CacheFlag.ACTIVITY)
+                    .enableCache(CacheFlag.VOICE_STATE)
+                    .addEventListeners(manager)
                     .build();
+
             System.out.println("Logged in successfully!");
         } catch (InvalidTokenException e) {
             if (data.isUsingEnvironmentalVariables()){
