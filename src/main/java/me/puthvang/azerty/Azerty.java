@@ -99,6 +99,7 @@ public class Azerty {
             CommandManager manager = new CommandManager();
             manager.add(new PlayCommand());
             manager.add(new SkipCommand());
+            manager.add(new QueueCommand());
 
             bot = JDABuilder.createDefault(data.getBot().getToken())
                     .enableIntents(GatewayIntent.GUILD_MEMBERS)
