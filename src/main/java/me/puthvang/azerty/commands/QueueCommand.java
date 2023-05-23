@@ -35,8 +35,10 @@ public class QueueCommand implements ICommand {
         Member member = event.getMember();
         GuildVoiceState memberVoiceState = member.getVoiceState();
 
+        event.deferReply().queue();
+
         if(!memberVoiceState.inAudioChannel()) {
-            event.reply("You need to be in a voice channel").queue();
+            event.getHook().editOriginal("You need to be in a voice channel").queue();
             return;
         }
 
@@ -44,12 +46,12 @@ public class QueueCommand implements ICommand {
         GuildVoiceState selfVoiceState = self.getVoiceState();
 
         if(!selfVoiceState.inAudioChannel()) {
-            event.reply("I am not in an audio channel").queue();
+            event.getHook().editOriginal("I am not in an audio channel").queue();
             return;
         }
 
         if(selfVoiceState.getChannel() != memberVoiceState.getChannel()) {
-            event.reply("You are not in the same channel as me").queue();
+            event.getHook().editOriginal("You are not in the same channel as me").queue();
             return;
         }
 
@@ -67,7 +69,7 @@ public class QueueCommand implements ICommand {
             s.append("[").append(i + 1).append("]: ").append(info.title).append(" by ").append(info.author);
         }
 
-        event.reply(s.toString()).queue();
+        event.getHook().editOriginal(s.toString()).queue();
     }
 
 }

@@ -9,6 +9,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,7 +41,7 @@ public class PlayerManager {
         });
     }
 
-    public void play(TextChannel channel, String trackURL) {
+    public void play(TextChannel channel, String trackURL, SlashCommandInteractionEvent event) {
         GuildMusicManager guildMusicManager = getGuildMusicManager(channel.getGuild());
         audioPlayerManager.loadItemOrdered(guildMusicManager, trackURL, new AudioLoadResultHandler() {
             @Override
@@ -48,7 +49,7 @@ public class PlayerManager {
                 guildMusicManager.getTrackScheduler().queue(track);
 
                 String s = "Adding to queue: `" + track.getInfo().title + "` by `" + track.getInfo().author + '`';
-                channel.sendMessage(s).queue();
+                event.getHook().editOriginal(s).queue();
             }
 
             @Override
@@ -59,20 +60,20 @@ public class PlayerManager {
                 guildMusicManager.getTrackScheduler().queue(track);
 
                 String s = "Adding to queue from a playlist: `" + track.getInfo().title + "` by `" + track.getInfo().author + '`';
-                channel.sendMessage(s).queue();
+                event.getHook().editOriginal(s).queue();
             }
 
             @Override
             public void noMatches() {
                 String s = "No audio exists for " + trackURL;
-                channel.sendMessage(s).queue();
+                event.getHook().editOriginal(s).queue();
             }
 
             @Override
             public void loadFailed(FriendlyException exception) {
 
                 String s = "There seems to be an error when trying to load up " + trackURL;
-                channel.sendMessage(s).queue();
+                event.getHook().editOriginal(s).queue();
             }
         });
     }

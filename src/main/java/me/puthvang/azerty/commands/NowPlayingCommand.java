@@ -33,8 +33,10 @@ public class NowPlayingCommand implements ICommand {
         Member member = event.getMember();
         GuildVoiceState memberVoiceState = member.getVoiceState();
 
+        event.deferReply().queue();
+
         if(!memberVoiceState.inAudioChannel()) {
-            event.reply("You need to be in a voice channel").queue();
+            event.getHook().editOriginal("You need to be in a voice channel").queue();
             return;
         }
 
@@ -42,18 +44,18 @@ public class NowPlayingCommand implements ICommand {
         GuildVoiceState selfVoiceState = self.getVoiceState();
 
         if(!selfVoiceState.inAudioChannel()) {
-            event.reply("I am not in an audio channel").queue();
+            event.getHook().editOriginal("I am not in an audio channel").queue();
             return;
         }
 
         if(selfVoiceState.getChannel() != memberVoiceState.getChannel()) {
-            event.reply("You are not in the same channel as me").queue();
+            event.getHook().editOriginal("You are not in the same channel as me").queue();
             return;
         }
 
         GuildMusicManager guildMusicManager = PlayerManager.get().getGuildMusicManager(event.getGuild());
         if(guildMusicManager.getTrackScheduler().getPlayer().getPlayingTrack() == null) {
-            event.reply("I am not playing anything").queue();
+            event.getHook().editOriginal("I am not playing anything").queue();
             return;
         }
 
@@ -64,7 +66,7 @@ public class NowPlayingCommand implements ICommand {
         s = s + "**Author**: " + info.author + "\n";
         s = s + "**URL**: <" + info.uri + ">\n";
 
-        event.reply(s).queue();
+        event.getHook().editOriginal(s).queue();
     }
 
 }

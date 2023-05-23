@@ -32,8 +32,10 @@ public class SkipCommand implements ICommand {
         Member member = event.getMember();
         GuildVoiceState memberVoiceState = member.getVoiceState();
 
+        event.deferReply().queue();
+
         if(!memberVoiceState.inAudioChannel()) {
-            event.reply("You need to be in a voice channel").queue();
+            event.getHook().editOriginal("You need to be in a voice channel").queue();
             return;
         }
 
@@ -41,18 +43,19 @@ public class SkipCommand implements ICommand {
         GuildVoiceState selfVoiceState = self.getVoiceState();
 
         if(!selfVoiceState.inAudioChannel()) {
-            event.reply("I am not in an audio channel").queue();
+            event.getHook().editOriginal("I am not in an audio channel").queue();
             return;
         }
 
         if(selfVoiceState.getChannel() != memberVoiceState.getChannel()) {
-            event.reply("You are not in the same channel as me").queue();
+            event.getHook().editOriginal("You are not in the same channel as me").queue();
             return;
         }
 
         GuildMusicManager guildMusicManager = PlayerManager.get().getGuildMusicManager(event.getGuild());
         guildMusicManager.getTrackScheduler().getPlayer().stopTrack();
-        event.reply("Skipped the current audio").queue();
+
+        event.getHook().editOriginal("Skipped the current audio").queue();
     }
 
 }

@@ -41,11 +41,12 @@ public class PlayCommand implements ICommand {
 
         Guild guild = event.getGuild();
         Member member = event.getMember();
-
         GuildVoiceState memberVoiceState = member.getVoiceState();
 
+        event.deferReply().queue();
+
         if (!memberVoiceState.inAudioChannel()) {
-            event.reply("You need to be in a voice channel").queue();
+            event.getHook().editOriginal("You need to be in a voice channel").queue();
             return;
         }
 
@@ -56,7 +57,7 @@ public class PlayCommand implements ICommand {
             guild.getAudioManager().openAudioConnection(memberVoiceState.getChannel());
         } else {
             if (selfVoiceState.getChannel() != memberVoiceState.getChannel()) {
-                event.reply("You need to be in the same channel as me").queue();
+                event.getHook().editOriginal("You need to be in the same channel as me").queue();
                 return;
             }
         }
@@ -69,7 +70,7 @@ public class PlayCommand implements ICommand {
         }
 
         PlayerManager playerManager = PlayerManager.get();
-        playerManager.play(channel, name);
+        playerManager.play(channel, name, event);
     }
 
 }
