@@ -70,7 +70,7 @@ public class PlayCommand implements ICommand {
         }
 
         PlayerManager playerManager = PlayerManager.get();
-        playerManager.play(channel, name, event);
+        playerManager.play(channel, name, event.getHook());
     }
 
 }
