@@ -2,9 +2,12 @@ package me.puthvang.azerty;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import me.puthvang.azerty.commands.*;
+import me.puthvang.azerty.commands.NowPlayingCommand;
+import me.puthvang.azerty.commands.PlayCommand;
+import me.puthvang.azerty.commands.QueueCommand;
+import me.puthvang.azerty.commands.SkipCommand;
 import me.puthvang.azerty.commands.manager.CommandManager;
-import me.puthvang.azerty.listeners.ButtonEventListener;
+import me.puthvang.azerty.listeners.SelectionEventListener;
 import me.puthvang.azerty.utilities.RegexPattern;
 import me.puthvang.azerty.utilities.Type;
 import net.dv8tion.jda.api.JDA;
@@ -112,7 +115,7 @@ public class Azerty {
                     .enableCache(CacheFlag.ACTIVITY)
                     .enableCache(CacheFlag.VOICE_STATE)
                     .addEventListeners(manager)
-                    .addEventListeners(new ButtonEventListener())
+                    .addEventListeners(new SelectionEventListener())
                     .build();
 
             System.out.println("Logged in successfully!");

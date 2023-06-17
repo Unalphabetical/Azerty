@@ -11,9 +11,8 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.interactions.InteractionHook;
-import net.dv8tion.jda.api.interactions.components.buttons.Button;
+import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,10 +51,10 @@ public class PlayerManager {
         audioPlayerManager.loadItemOrdered(guildMusicManager, trackURL, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
-                guildMusicManager.getTrackScheduler().queue(track);
 
                 String s = "Adding to queue: `" + track.getInfo().title + "` by `" + track.getInfo().author + '`';
                 hook.editOriginal(s).queue();
+                guildMusicManager.getTrackScheduler().queue(track);
             }
 
             @Override
@@ -63,18 +62,17 @@ public class PlayerManager {
                 if (playlist.getTracks().size() <= 0) return;
 
                 List<AudioTrack> tracks = playlist.getTracks();
-                List<Button> buttonList = new ArrayList<>();
+                StringSelectMenu.Builder menu = StringSelectMenu.create("azerty:music")
+                        .setPlaceholder("Rick Astley - Never Gonna Give You Up (Official Music Video)")
+                        .setRequiredRange(1, 1);
 
-                String s = "";
-                for (int i = 1; i <= 5; i++) {
+                for (int i = 1; i <= 15; i++) {
                     AudioTrack track = tracks.get(i);
                     AudioTrackInfo info = track.getInfo();
-
-                    s = s + "[**" + i + "**] **[" + info.title + "](" + info.uri + ")**\n";
-                    buttonList.add(Button.primary("playYouTubeID=====" + info.uri + "&uid=" + id, String.valueOf(i)));
+                    menu.addOption(info.title, "playYouTubeID=====" + info.uri + "&uid=" + id);
                 }
 
-                hook.editOriginal(s).setActionRow(buttonList).queue();
+                hook.editOriginal("").setActionRow(menu.build()).queue();
             }
 
             @Override
