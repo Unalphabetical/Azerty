@@ -66,7 +66,7 @@ public class QueueCommand implements ICommand {
 
         for(int i = 0; i < queue.size(); i++) {
             AudioTrackInfo info = queue.get(i).getInfo();
-            s.append("[").append(i + 1).append("]: ").append(info.title).append(" by ").append(info.author);
+            s.append("[").append(i + 1).append("]: **").append(info.title).append("** by **").append(info.author).append("**\n");
         }
 
         event.getHook().editOriginal(s.toString()).queue();
