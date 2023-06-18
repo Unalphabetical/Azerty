@@ -35,6 +35,8 @@ public class PlayCommand implements ICommand {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        event.deferReply().queue();
+
         TextChannel channel = event.getChannel().asTextChannel();
 
         if (event.getGuild() == null) return;
@@ -42,8 +44,6 @@ public class PlayCommand implements ICommand {
         Guild guild = event.getGuild();
         Member member = event.getMember();
         GuildVoiceState memberVoiceState = member.getVoiceState();
-
-        event.deferReply().queue();
 
         if (!memberVoiceState.inAudioChannel()) {
             event.getHook().editOriginal("You need to be in a voice channel").queue();

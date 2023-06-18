@@ -32,13 +32,13 @@ public class PauseCommand implements ICommand {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        event.deferReply().queue();
+
         if (event.getGuild() == null) return;
 
         Guild guild = event.getGuild();
         Member member = event.getMember();
         GuildVoiceState memberVoiceState = member.getVoiceState();
-
-        event.deferReply().queue();
 
         if (!memberVoiceState.inAudioChannel()) {
             event.getHook().editOriginal("You need to be in a voice channel").queue();
