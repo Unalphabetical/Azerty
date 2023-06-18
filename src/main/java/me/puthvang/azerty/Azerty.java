@@ -2,10 +2,7 @@ package me.puthvang.azerty;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import me.puthvang.azerty.commands.NowPlayingCommand;
-import me.puthvang.azerty.commands.PlayCommand;
-import me.puthvang.azerty.commands.QueueCommand;
-import me.puthvang.azerty.commands.SkipCommand;
+import me.puthvang.azerty.commands.*;
 import me.puthvang.azerty.commands.manager.CommandManager;
 import me.puthvang.azerty.listeners.SelectionEventListener;
 import me.puthvang.azerty.utilities.RegexPattern;
@@ -105,6 +102,7 @@ public class Azerty {
             manager.add(new SkipCommand());
             manager.add(new QueueCommand());
             manager.add(new NowPlayingCommand());
+            manager.add(new PauseCommand());
 
             bot = JDABuilder.createDefault(data.getBot().getToken())
                     .enableIntents(GatewayIntent.GUILD_MEMBERS)
