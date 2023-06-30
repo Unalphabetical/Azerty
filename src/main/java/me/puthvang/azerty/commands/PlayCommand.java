@@ -59,7 +59,9 @@ public class PlayCommand implements ICommand {
         GuildMusicManager guildMusicManager = playerManager.getGuildMusicManager(guild);
         AudioPlayer audioPlayer = guildMusicManager.getTrackScheduler().getPlayer();
 
-        if (selfVoiceState.getChannel() != memberVoiceState.getChannel()) {
+        if (!selfVoiceState.inAudioChannel()) {
+            guild.getAudioManager().openAudioConnection(memberVoiceState.getChannel());
+        } else if (selfVoiceState.getChannel() != memberVoiceState.getChannel()) {
             if (audioPlayer.getPlayingTrack() != null) {
                 event.getHook().editOriginal("I'm currently playing an audio in another channel, try again after I finish.").queue();
                 return;
