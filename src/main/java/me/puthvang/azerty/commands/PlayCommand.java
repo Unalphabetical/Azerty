@@ -1,6 +1,8 @@
 package me.puthvang.azerty.commands;
 
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import me.puthvang.azerty.commands.manager.ICommand;
+import me.puthvang.azerty.lavaplayer.GuildMusicManager;
 import me.puthvang.azerty.lavaplayer.PlayerManager;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -53,12 +55,16 @@ public class PlayCommand implements ICommand {
         Member self = guild.getSelfMember();
         GuildVoiceState selfVoiceState = self.getVoiceState();
 
-        if (!selfVoiceState.inAudioChannel()) {
-            guild.getAudioManager().openAudioConnection(memberVoiceState.getChannel());
-        } else {
-            if (selfVoiceState.getChannel() != memberVoiceState.getChannel()) {
-                event.getHook().editOriginal("You need to be in the same channel as me").queue();
+        PlayerManager playerManager = PlayerManager.get();
+        GuildMusicManager guildMusicManager = playerManager.getGuildMusicManager(guild);
+        AudioPlayer audioPlayer = guildMusicManager.getTrackScheduler().getPlayer();
+
+        if (selfVoiceState.getChannel() != memberVoiceState.getChannel()) {
+            if (audioPlayer.getPlayingTrack() != null) {
+                event.getHook().editOriginal("I'm currently playing an audio in another channel, try again after I finish.").queue();
                 return;
+            } else {
+                guild.getAudioManager().openAudioConnection(memberVoiceState.getChannel());
             }
         }
 
@@ -69,7 +75,6 @@ public class PlayCommand implements ICommand {
             name = "ytsearch:" + name;
         }
 
-        PlayerManager playerManager = PlayerManager.get();
         playerManager.play(channel, name, event.getHook());
     }
 
