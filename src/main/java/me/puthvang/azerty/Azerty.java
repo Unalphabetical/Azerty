@@ -103,6 +103,7 @@ public class Azerty {
             manager.add(new QueueCommand());
             manager.add(new NowPlayingCommand());
             manager.add(new PauseCommand());
+            manager.add(new VolumeCommand());
 
             bot = JDABuilder.createDefault(data.getBot().getToken())
                     .enableIntents(GatewayIntent.GUILD_MEMBERS)
