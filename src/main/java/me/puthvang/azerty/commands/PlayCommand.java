@@ -61,12 +61,16 @@ public class PlayCommand implements ICommand {
 
         if (!selfVoiceState.inAudioChannel()) {
             guild.getAudioManager().openAudioConnection(memberVoiceState.getChannel());
+            guild.getAudioManager().setSelfDeafened(true);
+            guild.getAudioManager().setSelfMuted(true);
         } else if (selfVoiceState.getChannel() != memberVoiceState.getChannel()) {
             if (audioPlayer.getPlayingTrack() != null) {
                 event.getHook().editOriginal("I'm currently playing an audio in another channel, try again after I finish.").queue();
                 return;
             } else {
                 guild.getAudioManager().openAudioConnection(memberVoiceState.getChannel());
+                guild.getAudioManager().setSelfDeafened(true);
+                guild.getAudioManager().setSelfMuted(true);
             }
         }
 
