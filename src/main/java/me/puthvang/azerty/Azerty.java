@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.puthvang.azerty.commands.*;
 import me.puthvang.azerty.commands.manager.CommandManager;
+import me.puthvang.azerty.listeners.GuildVoiceLeaveEventListener;
 import me.puthvang.azerty.listeners.SelectionEventListener;
 import me.puthvang.azerty.utilities.RegexPattern;
 import me.puthvang.azerty.utilities.Type;
@@ -115,6 +116,7 @@ public class Azerty {
                     .enableCache(CacheFlag.VOICE_STATE)
                     .addEventListeners(manager)
                     .addEventListeners(new SelectionEventListener())
+                    .addEventListeners(new GuildVoiceLeaveEventListener())
                     .build();
 
             System.out.println("Logged in successfully!");
